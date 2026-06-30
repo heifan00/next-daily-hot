@@ -1,10 +1,9 @@
 /*
- * @Author: 白雾茫茫丶<baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2024-05-13 16:25:11
- * @LastEditors: 白雾茫茫丶<baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-04 18:07:00
- * @Description: 哔哩哔哩-热门榜
- */
+ * @Description: 哔哩哔哩-热门�? */
 import md5 from 'crypto-js/md5';
 import { NextResponse } from 'next/server';
 
@@ -56,6 +55,8 @@ async function getWbiKeys() {
   };
 }
 
+export const revalidate = 600;
+
 export async function GET() {
   try {
     // 获取 WBI 签名密钥
@@ -83,7 +84,7 @@ export async function GET() {
     });
 
     if (!response.ok) {
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：哔哩哔哩-热门榜`);
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：哔哩哔�?热门榜`);
     }
 
     const responseBody = await response.json();
@@ -96,7 +97,7 @@ export async function GET() {
     const result: App.HotListItem[] = list.map((v) => ({
       id: v.bvid,
       title: v.title,
-      desc: v.desc || '该视频暂无简介',
+      desc: v.desc || '该视频暂无简�?,
       pic: v.pic?.replace(/http:/, 'https:'),
       hot: v.stat?.view || 0,
       url: v.short_link_v2 || `https://b23.tv/${v.bvid}`,

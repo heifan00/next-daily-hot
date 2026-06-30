@@ -1,7 +1,7 @@
 /*
- * @Author: 白雾茫茫丶<baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2026-01-20 15:22:39
- * @LastEditors: 白雾茫茫丶<baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-21 14:12:45
  * @Description: Github - 热门仓库
  */
@@ -25,11 +25,11 @@ export async function GET() {
       cache: 'no-store',
     });
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓存
+      // 如果请求失败，抛出错误，不进行缓�?
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：Github - 热门仓库`);
     }
 
-    // 格式化 star 数
+    // 格式�?star �?
     function formatStars(count: number): string {
       if (count < 1000) return count.toString();
 
@@ -40,7 +40,7 @@ export async function GET() {
       return `${(count / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
     }
 
-    // 得到请求体
+    // 得到请求�?
     const responseBody = await response.text();
     const $ = cheerio.load(responseBody);
     const listDom = $('.Box article.Box-row');

@@ -1,7 +1,7 @@
 /*
- * @Author: 白雾茫茫丶<baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2024-05-14 10:16:28
- * @LastEditors: 白雾茫茫丶<baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-04 18:09:18
  * @Description: 快手-热榜
  */
@@ -13,11 +13,13 @@ import { responseError, responseSuccess } from '@/lib/utils';
 const parseChineseNumber = (str: string): number => {
   if (!str) return 0;
   const clean = str.replace(/,/g, '');
-  if (clean.includes('万')) {
-    return parseFloat(clean.replace('万', '')) * 10000;
+  if (clean.includes('�?)) {
+    return parseFloat(clean.replace('�?, '')) * 10000;
   }
   return Number(clean) || 0;
 };
+
+export const revalidate = 600;
 
 export async function GET() {
   const url = 'https://www.kuaishou.com/?isHome=1';
@@ -33,13 +35,12 @@ export async function GET() {
     });
 
     if (!response.ok) {
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：快手-热榜`);
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：快�?热榜`);
     }
 
     const html = await response.text();
 
-    // 从 __APOLLO_STATE__ 中提取数据
-    const start = html.indexOf('window.__APOLLO_STATE__=');
+    // �?__APOLLO_STATE__ 中提取数�?    const start = html.indexOf('window.__APOLLO_STATE__=');
     if (start === -1) {
       throw new Error('快手页面结构变更，未找到 APOLLO_STATE');
     }
@@ -79,7 +80,7 @@ export async function GET() {
       const hotItem = jsonObject[item.id];
       if (!hotItem) return;
 
-      // 从 poster URL 中提取视频 ID
+      // �?poster URL 中提取视�?ID
       const poster = hotItem.poster || '';
       const idMatch = poster.match(/clientCacheKey=([^&]+)/);
       const videoId = idMatch?.[1] || hotItem.photoIds?.json?.[0] || hotItem.id;

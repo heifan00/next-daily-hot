@@ -1,7 +1,7 @@
 /*
- * @Author: 白雾茫茫丶<baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2026-01-21 10:07:06
- * @LastEditors: 白雾茫茫丶<baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-21 10:11:02
  * @Description: 人人都是产品经理 - 热榜
  */
@@ -23,10 +23,10 @@ export async function GET() {
       cache: 'no-store',
     });
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓存
+      // 如果请求失败，抛出错误，不进行缓�?
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)} 人人都是产品经理 - 热榜`);
     }
-    // 得到请求体
+    // 得到请求�?
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.CODE === 200) {

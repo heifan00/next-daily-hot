@@ -1,7 +1,7 @@
 /*
- * @Author: 白雾茫茫丶<baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2024-05-14 09:54:58
- * @LastEditors: 白雾茫茫丶<baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-04 18:09:43
  * @Description: 英雄联盟-更新公告
  */
@@ -10,6 +10,8 @@ import { NextResponse } from 'next/server';
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
+export const revalidate = 600;
+
 export async function GET() {
   // 官方 url
   const url = 'https://apps.game.qq.com/cmc/zmMcnTargetContentList?page=1&num=50&target=24&source=web_pc';
@@ -17,10 +19,10 @@ export async function GET() {
     // 请求数据
     const response = await fetch(url);
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓存
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：英雄联盟-更新公告`);
+      // 如果请求失败，抛出错误，不进行缓�?
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：英雄联�?更新公告`);
     }
-    // 得到请求体
+    // 得到请求�?
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.status === 1) {
