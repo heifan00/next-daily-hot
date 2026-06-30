@@ -11,16 +11,15 @@ import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
-  // 官方 url
-  const url = 'https://api.bilibili.com/x/web-interface/ranking/v2';
+  // 使用 popular 接口，无需 cookie，兼容 Cloudflare Workers
+  const url = 'https://api.bilibili.com/x/web-interface/popular?ps=40&pn=1';
   try {
     // 请求数据
     const response = await fetch(url, {
       headers: {
-        Referer: `https://www.bilibili.com/ranking/all`,
+        Referer: 'https://www.bilibili.com',
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-        Cookie: 'buvid3=random123',
       },
     });
     if (!response.ok) {
@@ -29,8 +28,8 @@ export async function GET() {
     }
     // 得到请求体
     const responseBody = await response.json();
-    const data = responseBody?.data?.realtime || responseBody?.data?.list;
-    if (!data) {
+    const data = responseBody?.data?.list;
+    if (!data?.length) {
       return NextResponse.json(responseSuccess());
     }
     const result: App.HotListItem[] = data.map((v) => {
