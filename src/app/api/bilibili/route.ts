@@ -13,12 +13,12 @@ import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
-  // 使用 popular 接口，无需 WBI 签名，兼容性好
-  const url = 'https://api.bilibili.com/x/web-interface/popular?ps=40&pn=1';
+  // 使用 JSONP 回调接口，兼容 Cloudflare Workers
+  const url = 'https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all&callback=__jp0';
   try {
     const response = await fetch(url, {
       headers: {
-        Referer: 'https://www.bilibili.com',
+        Referer: 'https://www.bilibili.com/ranking/all',
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
       },
@@ -28,7 +28,11 @@ export async function GET() {
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：哔哩哔哩-热门榜`);
     }
 
-    const responseBody = await response.json();
+    // 响应是 JSONP 格式：__jp0({...})
+    const text = await response.text();
+    const jsonStr = text.replace(/^__jp0\(/, '').replace(/\)$/, '');
+    const responseBody = JSON.parse(jsonStr);
+
     const list = responseBody?.data?.list;
 
     if (!list?.length) {
@@ -41,7 +45,7 @@ export async function GET() {
       desc: v.desc || '该视频暂无简介',
       pic: v.pic?.replace(/http:/, 'https:'),
       hot: v.stat?.view || 0,
-      url: v.short_link_v2 || `https://b23.tv/${v.bvid}`,
+      url: `https://b23.tv/${v.bvid}`,
       mobileUrl: `https://m.bilibili.com/video/${v.bvid}`,
     }));
 
