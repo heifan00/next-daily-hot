@@ -13,39 +13,38 @@ import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
-  // 官方 url
-  const url = 'https://api.bilibili.com/x/web-interface/ranking/v2';
+  // 使用 popular 接口，无需 WBI 签名，兼容性好
+  const url = 'https://api.bilibili.com/x/web-interface/popular?ps=40&pn=1';
   try {
-    // 请求数据
     const response = await fetch(url, {
       headers: {
-        Referer: `https://www.bilibili.com/ranking/all`,
+        Referer: 'https://www.bilibili.com',
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-        Cookie: 'buvid3=random123',
       },
     });
+
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓存
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：哔哩哔哩-热门榜`);
     }
-    // 得到请求体
+
     const responseBody = await response.json();
-    const data = responseBody?.data?.realtime || responseBody?.data?.list;
-    if (!data) {
+    const list = responseBody?.data?.list;
+
+    if (!list?.length) {
       return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('bilibili') });
     }
-    const result: App.HotListItem[] = data.map((v) => {
-      return {
-        id: v.bvid,
-        title: v.title,
-        desc: v.desc,
-        pic: v.pic.replace(/http:/, 'https:'),
-        hot: v.stat.view,
-        url: v.short_link_v2 || `https://b23.tv/${v.bvid}`,
-        mobileUrl: `https://m.bilibili.com/video/${v.bvid}`,
-      };
-    });
+
+    const result: App.HotListItem[] = list.map((v) => ({
+      id: v.bvid,
+      title: v.title,
+      desc: v.desc || '该视频暂无简介',
+      pic: v.pic?.replace(/http:/, 'https:'),
+      hot: v.stat?.view || 0,
+      url: v.short_link_v2 || `https://b23.tv/${v.bvid}`,
+      mobileUrl: `https://m.bilibili.com/video/${v.bvid}`,
+    }));
+
     return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('bilibili') });
   } catch {
     return NextResponse.json(responseError);
