@@ -1,22 +1,21 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2026-01-14 16:54:38
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-14 17:26:28
- * @Description: 虎扑-步行街热�?
+ * @Description: 虎扑-步行街热�?
  */
 import { NextResponse } from 'next/server';
 
+import { getCacheHeaders } from '@/lib/cache';
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
-export const revalidate = 600;
-
 export async function GET() {
-  // 使用移动端页面，兼容 Cloudflare Workers（桌面端被阿里云 WAF 拦截�?
+  // 使用移动端页面，兼容 Cloudflare Workers（桌面端被阿里云 WAF 拦截�?
   const url = 'https://bbs.hupu.com/all-gambia';
   try {
-    // 请求数据（使用移动端 UA 获取 __NEXT_DATA__�?
+    // 请求数据（使用移动端 UA 获取 __NEXT_DATA__�?
     const response = await fetch(url, {
       headers: {
         'User-Agent':
@@ -27,7 +26,7 @@ export async function GET() {
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}虎扑-步行街热帖`);
     }
     const responseBody = await response.text();
-    // �?__NEXT_DATA__ 中提取数�?
+    // �?__NEXT_DATA__ 中提取数�?
     const match = responseBody.match(/__NEXT_DATA__.*?>(.*?)<\/script>/);
     if (!match?.[1]) {
       throw new Error('无法解析虎扑数据');
@@ -35,7 +34,7 @@ export async function GET() {
     const nextData = JSON.parse(match[1]);
     const list = nextData?.props?.pageProps?.list;
     if (!list?.length) {
-      return NextResponse.json(responseSuccess());
+      return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('hupu') });
     }
     const result: App.HotListItem[] = list.map((v) => {
       return {
@@ -48,7 +47,7 @@ export async function GET() {
         mobileUrl: `https://bbs.hupu.com/${v.tid}`,
       };
     });
-    return NextResponse.json(responseSuccess(result));
+    return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('hupu') });
   } catch {
     return NextResponse.json(responseError);
   }

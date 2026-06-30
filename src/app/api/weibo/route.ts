@@ -1,16 +1,15 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2024-05-11 14:37:26
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-15 10:23:02
- * @Description: 微博-热搜�?
+ * @Description: 微博-热搜�?
  */
 import { NextResponse } from 'next/server';
 
+import { getCacheHeaders } from '@/lib/cache';
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
-
-export const revalidate = 600;
 
 export async function GET() {
   // 官方 url
@@ -26,10 +25,10 @@ export async function GET() {
       },
     });
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：微�?热搜榜`);
+      // 如果请求失败，抛出错误，不进行缓�?
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：微�?热搜榜`);
     }
-    // 得到请求�?
+    // 得到请求�?
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.ok === 1) {
@@ -45,9 +44,9 @@ export async function GET() {
           mobileUrl: `https://s.weibo.com/weibo?q=${encodeURIComponent(key)}&t=31&band_rank=1&Refer=top`,
         };
       });
-      return NextResponse.json(responseSuccess(result));
+      return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('weibo') });
     }
-    return NextResponse.json(responseSuccess());
+    return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('weibo') });
   } catch {
     return NextResponse.json(responseError);
   }

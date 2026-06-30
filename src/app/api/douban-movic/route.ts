@@ -1,17 +1,16 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2024-05-14 14:02:04
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-04 18:07:27
- * @Description: 豆瓣电影-新片�?
+ * @Description: 豆瓣电影-新片�?
  */
 import * as cheerio from 'cheerio';
 import { NextResponse } from 'next/server';
 
+import { getCacheHeaders } from '@/lib/cache';
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
-
-export const revalidate = 600;
 
 export async function GET() {
   // 官方 url
@@ -20,10 +19,10 @@ export async function GET() {
     // 请求数据
     const response = await fetch(url);
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：豆瓣电�?新片榜`);
+      // 如果请求失败，抛出错误，不进行缓�?
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：豆瓣电�?新片榜`);
     }
-    // 得到请求�?
+    // 得到请求�?
     const responseBody = await response.text();
     // 处理数据
     const getNumbers = (text: string | undefined) => {
@@ -52,7 +51,7 @@ export async function GET() {
         mobileUrl: `https://m.douban.com/movie/subject/${getNumbers(url)}/`,
       };
     });
-    return NextResponse.json(responseSuccess(result));
+    return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('douban-movic') });
   } catch {
     return NextResponse.json(responseError);
   }

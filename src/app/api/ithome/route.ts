@@ -1,17 +1,16 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2026-01-26 15:47:22
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-26 15:52:15
  * @Description: IT之家- 热榜
  */
 import * as cheerio from 'cheerio';
 import { NextResponse } from 'next/server';
 
+import { getCacheHeaders } from '@/lib/cache';
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
-
-export const revalidate = 600;
 
 export async function GET() {
   // 官方 url
@@ -20,10 +19,10 @@ export async function GET() {
     // 请求数据
     const response = await fetch(url);
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
+      // 如果请求失败，抛出错误，不进行缓�?
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：IT之家- 热榜`);
     }
-    // 得到请求�?
+    // 得到请求�?
     const responseBody = await response.text();
     // 链接处理
     const replaceLink = (url: string, getId: boolean = false) => {
@@ -51,7 +50,7 @@ export async function GET() {
         mobileUrl: href ? replaceLink(href) : "",
       };
     });
-    return NextResponse.json(responseSuccess(result));
+    return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('ithome') });
   } catch {
     return NextResponse.json(responseError);
   }

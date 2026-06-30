@@ -1,12 +1,13 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2024-05-13 16:25:11
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-04 18:07:00
- * @Description: 哔哩哔哩-热门�? */
+ * @Description: 哔哩哔哩-热门�? */
 import md5 from 'crypto-js/md5';
 import { NextResponse } from 'next/server';
 
+import { getCacheHeaders } from '@/lib/cache';
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
@@ -84,27 +85,27 @@ export async function GET() {
     });
 
     if (!response.ok) {
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：哔哩哔�?热门榜`);
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：哔哩哔�?热门榜`);
     }
 
     const responseBody = await response.json();
     const list = responseBody?.data?.list;
 
     if (!list?.length) {
-      return NextResponse.json(responseSuccess());
+      return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('bilibili') });
     }
 
     const result: App.HotListItem[] = list.map((v) => ({
       id: v.bvid,
       title: v.title,
-      desc: v.desc || '该视频暂无简�?,
+      desc: v.desc || '该视频暂无简�?,
       pic: v.pic?.replace(/http:/, 'https:'),
       hot: v.stat?.view || 0,
       url: v.short_link_v2 || `https://b23.tv/${v.bvid}`,
       mobileUrl: `https://m.bilibili.com/video/${v.bvid}`,
     }));
 
-    return NextResponse.json(responseSuccess(result));
+    return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('bilibili') });
   } catch {
     return NextResponse.json(responseError);
   }

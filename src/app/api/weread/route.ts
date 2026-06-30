@@ -1,9 +1,9 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2024-05-14 11:27:32
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-04 18:12:31
- * @Description: 微信读书-飙升�?
+ * @Description: 微信读书-飙升�?
  */
 import { NextResponse } from 'next/server';
 
@@ -19,10 +19,10 @@ export async function GET() {
     // 请求数据
     const response = await fetch(url);
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：微信读�?飙升榜`);
+      // 如果请求失败，抛出错误，不进行缓�?
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：微信读�?飙升榜`);
     }
-    // 得到请求�?
+    // 得到请求�?
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.books) {
@@ -37,9 +37,9 @@ export async function GET() {
           mobileUrl: `https://weread.qq.com/web/bookDetail/${getWereadID(info.bookId)}`,
         };
       });
-      return NextResponse.json(responseSuccess(result));
+      return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('weread') });
     }
-    return NextResponse.json(responseSuccess());
+    return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('weread') });
   } catch {
     return NextResponse.json(responseError);
   }

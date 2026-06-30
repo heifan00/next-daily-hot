@@ -1,16 +1,15 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2026-01-14 11:08:28
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-14 11:20:26
- * @Description: 小红书实时热�?
+ * @Description: 小红书实时热�?
  */
 import { NextResponse } from 'next/server';
 
+import { getCacheHeaders } from '@/lib/cache';
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
-
-export const revalidate = 600;
 
 export async function GET() {
   // 官方 url
@@ -33,10 +32,10 @@ export async function GET() {
       headers: xhsHeaders,
     });
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
+      // 如果请求失败，抛出错误，不进行缓�?
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：小红书-实时热榜`);
     }
-    // 得到请求�?
+    // 得到请求�?
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.success) {
@@ -45,14 +44,14 @@ export async function GET() {
           id: v.id,
           title: v.title,
           hot: v.score,
-          label: (!v.word_type || v.word_type === '�?) ? undefined : v.word_type,
+          label: (!v.word_type || v.word_type === '�?) ? undefined : v.word_type,
           url: `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(v.title)}`,
           mobileUrl: `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(v.title)}`,
         };
       });
-      return NextResponse.json(responseSuccess(result));
+      return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('xiaohongshu') });
     }
-    return NextResponse.json(responseSuccess());
+    return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('xiaohongshu') });
   } catch {
     return NextResponse.json(responseError);
   }

@@ -1,16 +1,15 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫�?baiwumm.com>
  * @Date: 2024-05-14 09:33:19
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫�?baiwumm.com>
  * @LastEditTime: 2026-01-15 10:27:02
- * @Description: 百度-热搜�?
+ * @Description: 百度-热搜�?
  */
 import { NextResponse } from 'next/server';
 
+import { getCacheHeaders } from '@/lib/cache';
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
-
-export const revalidate = 600;
 
 export async function GET() {
   // 官方 url
@@ -19,10 +18,10 @@ export async function GET() {
     // 请求数据
     const response = await fetch(url);
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：百�?热搜榜`);
+      // 如果请求失败，抛出错误，不进行缓�?
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：百�?热搜榜`);
     }
-    // 得到请求�?
+    // 得到请求�?
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.success) {
@@ -35,9 +34,9 @@ export async function GET() {
           mobileUrl: v.url,
         };
       });
-      return NextResponse.json(responseSuccess(result));
+      return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('baidu') });
     }
-    return NextResponse.json(responseSuccess());
+    return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('baidu') });
   } catch {
     return NextResponse.json(responseError);
   }
