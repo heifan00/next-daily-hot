@@ -20,6 +20,7 @@ export async function GET() {
         Referer: `https://www.bilibili.com/ranking/all`,
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+        Cookie: 'buvid3=random123',
       },
     });
     if (!response.ok) {
