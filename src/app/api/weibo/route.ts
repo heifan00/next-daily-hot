@@ -1,13 +1,14 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2024-05-11 14:37:26
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫丶<baiwumm.com>
  * @LastEditTime: 2026-01-15 10:23:02
- * @Description: 微博-热搜�?
+ * @Description: 微博-热搜榜
  */
 import { NextResponse } from 'next/server';
 
 import { getCacheHeaders } from '@/lib/cache';
+
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
@@ -25,10 +26,10 @@ export async function GET() {
       },
     });
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：微�?热搜榜`);
+      // 如果请求失败，抛出错误，不进行缓存
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：微博-热搜榜`);
     }
-    // 得到请求�?
+    // 得到请求体
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.ok === 1) {

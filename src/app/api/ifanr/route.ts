@@ -1,13 +1,14 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2026-01-26 15:39:27
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫丶<baiwumm.com>
  * @LastEditTime: 2026-01-26 15:41:04
- * @Description: 爱范�?- 快讯
+ * @Description: 爱范儿 - 快讯
  */
 import { NextResponse } from 'next/server';
 
 import { getCacheHeaders } from '@/lib/cache';
+
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
@@ -18,10 +19,10 @@ export async function GET() {
     // 请求数据
     const response = await fetch(url);
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
+      // 如果请求失败，抛出错误，不进行缓存
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：爱范儿 - 快讯`);
     }
-    // 得到请求�?
+    // 得到请求体
     const responseBody = await response.json();
     const data = responseBody?.objects;
     if (!data) {

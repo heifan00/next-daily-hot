@@ -1,16 +1,16 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2024-05-14 14:13:34
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫丶<baiwumm.com>
  * @LastEditTime: 2026-01-04 18:10:29
- * @Description: 网易云音�?新歌�?
+ * @Description: 网易云音乐-新歌榜
  */
 import { NextResponse } from 'next/server';
 
+import { getCacheHeaders } from '@/lib/cache';
+
 import { RESPONSE } from '@/enums';
 import { convertMillisecondsToTime, responseError, responseSuccess } from '@/lib/utils';
-
-export const revalidate = 600;
 
 export async function GET() {
   // 官方 url
@@ -24,10 +24,10 @@ export async function GET() {
       },
     });
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
+      // 如果请求失败，抛出错误，不进行缓存
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：网易云音乐-新歌榜`);
     }
-    // 得到请求�?
+    // 得到请求体
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.code === 200) {

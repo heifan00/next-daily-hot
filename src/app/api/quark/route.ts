@@ -1,7 +1,7 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2026-01-14 17:51:27
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫丶<baiwumm.com>
  * @LastEditTime: 2026-01-14 17:59:22
  * @Description: 夸克-今日热点
  */
@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import { NextResponse } from 'next/server';
 
 import { getCacheHeaders } from '@/lib/cache';
+
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
@@ -19,10 +20,10 @@ export async function GET() {
     // 请求数据
     const response = await fetch(url);
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：夸�?今日热点`);
+      // 如果请求失败，抛出错误，不进行缓存
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：夸克-今日热点`);
     }
-    // 得到请求�?
+    // 得到请求体
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.status === 0) {

@@ -1,13 +1,14 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2026-01-26 14:40:35
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫丶<baiwumm.com>
  * @LastEditTime: 2026-01-26 14:58:50
- * @Description: 虎嗅 - 最新资�?
+ * @Description: 虎嗅 - 最新资讯
  */
 import { NextResponse } from 'next/server';
 
 import { getCacheHeaders } from '@/lib/cache';
+
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
@@ -23,10 +24,10 @@ export async function GET() {
       },
     });
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：虎�?- 最新资讯`);
+      // 如果请求失败，抛出错误，不进行缓存
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：虎嗅 - 最新资讯`);
     }
-    // 得到请求�?
+    // 得到请求体
     const responseBody = await response.json();
     if (responseBody.success) {
       const result: App.HotListItem[] = responseBody?.data?.moment_list?.datalist.map((v) => {
@@ -35,7 +36,7 @@ export async function GET() {
           .split("\n")
           .map((s) => s.trim())
           .filter(Boolean);
-        const title = titleLine?.replace(/�?/, "") || "";
+        const title = titleLine?.replace(/。$/, "") || "";
         const intro = rest.join("\n");
         const id = v.object_id;
         return {

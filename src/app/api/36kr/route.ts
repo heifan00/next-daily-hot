@@ -1,13 +1,14 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2026-01-26 14:03:29
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫丶<baiwumm.com>
  * @LastEditTime: 2026-01-26 14:18:34
  * @Description: 36kr - 24小时热榜
  */
 import { NextResponse } from 'next/server';
 
 import { getCacheHeaders } from '@/lib/cache';
+
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
@@ -32,10 +33,10 @@ export async function GET() {
       }),
     });
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}�?6kr - 24小时热榜`);
+      // 如果请求失败，抛出错误，不进行缓存
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：36kr - 24小时热榜`);
     }
-    // 得到请求�?
+    // 得到请求体
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.code === 0) {

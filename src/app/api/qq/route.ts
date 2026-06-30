@@ -1,13 +1,14 @@
 /*
- * @Author: 白雾茫茫�?baiwumm.com>
+ * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2024-05-14 09:42:24
- * @LastEditors: 白雾茫茫�?baiwumm.com>
+ * @LastEditors: 白雾茫茫丶<baiwumm.com>
  * @LastEditTime: 2026-01-04 18:10:59
- * @Description: 腾讯新闻-热点�?
+ * @Description: 腾讯新闻-热点榜
  */
 import { NextResponse } from 'next/server';
 
 import { getCacheHeaders } from '@/lib/cache';
+
 import { RESPONSE } from '@/enums';
 import { responseError, responseSuccess } from '@/lib/utils';
 
@@ -18,10 +19,10 @@ export async function GET() {
     // 请求数据
     const response = await fetch(url);
     if (!response.ok) {
-      // 如果请求失败，抛出错误，不进行缓�?
-      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：腾讯新�?热点榜`);
+      // 如果请求失败，抛出错误，不进行缓存
+      throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：腾讯新闻-热点榜`);
     }
-    // 得到请求�?
+    // 得到请求体
     const responseBody = await response.json();
     // 处理数据
     if (responseBody.ret === 0) {
