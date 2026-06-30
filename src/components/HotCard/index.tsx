@@ -87,7 +87,7 @@ const HotCard = ({ value, label, tip, prefix, suffix }: App.HotListConfig) => {
         <div className="flex items-center gap-2">
           <Image
             src={`/${value}.svg`}
-            alt={`${label}${tip}`}
+            alt={`${label} ${tip} - ${process.env.NEXT_PUBLIC_APP_NAME}`}
             width={24}
             height={24}
           />

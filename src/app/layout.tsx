@@ -42,6 +42,7 @@ export const metadata: Metadata = {
     title: process.env.NEXT_PUBLIC_APP_NAME,
     description: process.env.NEXT_PUBLIC_APP_DESC,
     siteName: process.env.NEXT_PUBLIC_APP_NAME,
+    images: [{ url: `${process.env.NEXT_PUBLIC_APP_URL}/og.png`, width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -49,6 +50,9 @@ export const metadata: Metadata = {
     description: process.env.NEXT_PUBLIC_APP_DESC,
     images: [`${process.env.NEXT_PUBLIC_APP_URL}/og.png`],
     creator: pkg.author.name,
+  },
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_APP_URL,
   },
 };
 
@@ -62,7 +66,28 @@ export default function RootLayout({
       {/* 引入字体文件 */}
       <head>
         <meta name="version" content={pkg.version} />
+        <link rel="preconnect" href="https://cdn.baiwumm.com" />
         <link rel="stylesheet" href="https://cdn.baiwumm.com/fonts/MapleMono-CN-Regular/result.css" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: process.env.NEXT_PUBLIC_APP_NAME,
+              description: process.env.NEXT_PUBLIC_APP_DESC,
+              url: process.env.NEXT_PUBLIC_APP_URL,
+              publisher: {
+                '@type': 'Organization',
+                name: process.env.NEXT_PUBLIC_APP_NAME,
+                logo: {
+                  '@type': 'ImageObject',
+                  url: `${process.env.NEXT_PUBLIC_APP_URL}/logo.svg`,
+                },
+              },
+            }),
+          }}
+        />
         {/* Umami 统计 */}
         <UmamiAnalytics />
         {/* 百度统计 */}

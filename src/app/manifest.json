@@ -1,6 +1,6 @@
 {
-  "name": "今日热榜",
-  "short_name": "今日热榜",
+  "name": "搜搜热",
+  "short_name": "搜搜热",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
