@@ -1,0 +1,159 @@
+# Changelog
+
+## [3.5.4](https://github.com/baiwumm/next-daily-hot/compare/3.5.3...3.5.4) (2026-06-26)
+
+### 💄 Styles | 风格
+
+* **components:** 更新 Status 组件 variant 样式 ([1a35542](https://github.com/baiwumm/next-daily-hot/commit/1a35542c5822682c16543bdef9d8b3208153b8d4))
+
+### 🔧 Continuous Integration | CI 配置
+
+* 更新 Hero UI 版本 ([9762d58](https://github.com/baiwumm/next-daily-hot/commit/9762d58a65c28b08cac2d6c88407277e626b19fb))
+* 更新包版本 ([bdcbada](https://github.com/baiwumm/next-daily-hot/commit/bdcbada07e46e30c3ff8df6ecb93c707942b585c))
+
+## [3.5.3](///compare/3.5.2...3.5.3) (2026-03-16)
+
+### Performance Improvements
+
+* 删除 ProgressCircle 组件 16e0142
+* **BackTop:** 使用 Hero UI 的 ProgressCircle 组件，优化卡顿 a421747
+
+## [3.5.2](///compare/3.5.1...3.5.2) (2026-03-11)
+
+### Features
+
+* **Footer:** 修改友情链接 286784f
+
+### Performance Improvements
+
+* 禁止 Image 图片优化 7e36173
+* **OverflowDetector:** 优化页面主题切换卡顿的问题 68ff709
+
+## [3.5.1](///compare/3.5.0...3.5.1) (2026-02-06)
+
+### Performance Improvements
+
+* **HotCard:** 优化暗黑主题过渡卡顿的问题 e65f42b
+* TS 类型完善 32c56b5
+
+## [3.5.0](///compare/3.4.2...3.5.0) (2026-01-26)
+
+### Features
+
+* 新增 36kr - 24小时热榜 64d6a6e
+* 新增 爱范儿 - 快讯 ba71546
+* 新增 虎嗅 - 最新资讯 1e09849
+* 新增 知乎日报 - 推荐榜 b5e2088
+* 新增 IT之家- 热榜 14c2d42
+
+### Bug Fixes
+
+* 修复 Modal 不能关闭的问题 df3d77c
+
+### Performance Improvements
+
+* 细节调整 22fdd08
+
+## [3.4.2](///compare/3.4.1...3.4.2) (2026-01-26)
+
+### Features
+
+* 更新 Hero UI 版本，配置主题 03a7c3e
+
+## [3.4.1](///compare/3.4.0...3.4.1) (2026-01-21)
+
+### Features
+
+* 新增 人人都是产品经理 - 热榜 79df423
+* 新增 CSDN - 热榜 cd00515
+
+### Performance Improvements
+
+* 删除 console.log 3a452f6
+
+## [3.4.0](///compare/3.3.1...3.4.0) (2026-01-20)
+
+### Features
+
+* 新增 Github - 热门仓库 8b90396
+* 新增 HelloGithub - 精选 91ac5ac
+
+### Performance Improvements
+
+* **HotSettings:** 禁用 Modal 点击关闭 227bf46
+
+## [3.3.1](///compare/3.3.0...3.3.1) (2026-01-15)
+
+### Features
+
+* **baidu:** 新增 label 标签字段 ba7d048
+* **weibo:** 更改热度字段 1d81277
+
+## [3.3.0](///compare/3.2.1...3.3.0) (2026-01-15)
+
+### Features
+
+* 新增 夸克-今日热点 80ff40f
+* **HotSettings:** 添加“恢复默认设置”功能 361ed08
+
+## [3.2.1](///compare/3.2.0...3.2.1) (2026-01-14)
+
+### Features
+
+* 新增 虎扑-步行街热帖 8fa301e
+
+## [3.2.0](///compare/3.1.1...3.2.0) (2026-01-14)
+
+### Features
+
+* 新增 懂车帝-热搜榜 00c6b27
+* 新增 小红书-实时热榜 b1b8c99
+* **HotSettings:** 热榜支持拖拽排序显示 db6ce60
+
+## [3.1.1](///compare/3.1.0...3.1.1) (2026-01-13)
+
+### Performance Improvements
+
+* 优化类型 05d9eab
+
+## [3.1.0](///compare/3.0.1...3.1.0) (2026-01-12)
+
+### Features
+
+* **HotCard:** 更新时间逻辑优化，其它细节微调 8dc3cad
+* **HotCard:** 新增列表虚拟滚动 1d7d5bf
+
+## [3.0.1](///compare/3.0.0...3.0.1) (2026-01-05)
+
+### Features
+
+* update README.md 6e7d7d8
+
+## [3.0.0](///compare/2.1.0...3.0.0) (2026-01-05)
+
+### Bug Fixes
+
+* 修复百度热搜榜接口异常的问题 d2f7e33
+
+### Performance Improvements
+
+* 优化 SEO 信息 e8ebfcb
+* **eslint:** 优化 eslint 配置规则 be8d366
+
+## [2.1.0](///compare/2.0.0...2.1.0) (2025-11-21)
+
+### Features
+
+* 安装配置 Hero UI a56d6ed
+* 完成顶部和底部布局和相应交互逻辑 4ac9d70
+* 完成热榜卡片内容的开发 fe8b370
+* 完成主体内容、热榜卡片布局 308c32c
+* 细节优化 087b0e0
+* 新增 BackTop 回到顶部组件 74d7c77
+* 新增 NotFound 页面 de91aa6
+* 新增release-it @release-it/conventional-changelog 包 72d92bd
+* **metadata:** 完善网站 Meta 信息 a498986
+* update README.md a5d5168
+* update README.md 86dca7c
+
+## [2.0.0](///compare/1.6.6...2.0.0) (2025-11-19)
