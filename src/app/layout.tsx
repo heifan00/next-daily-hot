@@ -66,8 +66,7 @@ export default function RootLayout({
       {/* 引入字体文件 */}
       <head>
         <meta name="version" content={pkg.version} />
-        <link rel="preconnect" href="https://cdn.baiwumm.com" />
-        <link rel="stylesheet" href="https://cdn.baiwumm.com/fonts/MapleMono-CN-Regular/result.css" />
+        <link rel="stylesheet" href="/fonts/MapleMono-CN-Regular/result.css" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
