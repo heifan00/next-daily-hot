@@ -11,16 +11,18 @@ import { NextResponse } from 'next/server';
 import { getCacheHeaders } from '@/lib/cache';
 
 import { RESPONSE } from '@/enums';
+import { getHotProxyRequest } from '@/lib/hotProxy';
 import { logHotSourceDebug, logHotSourceError, readHotSourceText } from '@/lib/hotSourceDebug';
 import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
   // 官方 url
-  const url = 'https://bbs.hupu.com/all-gambia';
+  const upstreamUrl = 'https://bbs.hupu.com/all-gambia';
+  const request = getHotProxyRequest('hupu', upstreamUrl);
   try {
     // 请求数据
-    const response = await fetch(url);
-    const responseBody = await readHotSourceText('hupu', url, response);
+    const response = await fetch(request.url, request.init);
+    const responseBody = await readHotSourceText('hupu', request.url, response);
 
     if (!response.ok) {
       // 如果请求失败，抛出错误，不进行缓存
@@ -34,8 +36,9 @@ export async function GET() {
       .threads;
 
     if (!data?.length) {
-      logHotSourceDebug('hupu', url, {
+      logHotSourceDebug('hupu', request.url, {
         stage: 'parsed-empty',
+        proxied: request.proxied,
       });
     }
 
@@ -52,7 +55,7 @@ export async function GET() {
     });
     return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('hupu') });
   } catch (error) {
-    logHotSourceError('hupu', url, error);
+    logHotSourceError('hupu', request.url, error);
 
     return NextResponse.json(responseError);
   }

@@ -10,22 +10,24 @@ import { NextResponse } from 'next/server';
 import { getCacheHeaders } from '@/lib/cache';
 
 import { RESPONSE } from '@/enums';
+import { getHotProxyRequest } from '@/lib/hotProxy';
 import { logHotSourceDebug, logHotSourceError, readHotSourceText } from '@/lib/hotSourceDebug';
 import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
   // 使用 JSONP 回调接口，兼容 Cloudflare Workers
-  const url = 'https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all&callback=__jp0';
+  const upstreamUrl = 'https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all&callback=__jp0';
+  const request = getHotProxyRequest('bilibili', upstreamUrl, {
+    headers: {
+      Referer: 'https://www.bilibili.com/ranking/all',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+    },
+  });
   try {
-    const response = await fetch(url, {
-      headers: {
-        Referer: 'https://www.bilibili.com/ranking/all',
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-      },
-    });
+    const response = await fetch(request.url, request.init);
 
-    const text = await readHotSourceText('bilibili', url, response);
+    const text = await readHotSourceText('bilibili', request.url, response);
 
     if (!response.ok) {
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：哔哩哔哩-热门榜`);
@@ -38,9 +40,10 @@ export async function GET() {
     const list = responseBody?.data?.list;
 
     if (!list?.length) {
-      logHotSourceDebug('bilibili', url, {
+      logHotSourceDebug('bilibili', request.url, {
         stage: 'parsed-empty',
         dataKeys: Object.keys(responseBody?.data || {}),
+        proxied: request.proxied,
       });
 
       return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('bilibili') });
@@ -58,7 +61,7 @@ export async function GET() {
 
     return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('bilibili') });
   } catch (error) {
-    logHotSourceError('bilibili', url, error);
+    logHotSourceError('bilibili', request.url, error);
 
     return NextResponse.json(responseError);
   }

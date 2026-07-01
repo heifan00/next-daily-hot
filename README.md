@@ -104,7 +104,7 @@
 | <img src="./public/qq.svg" width="20"/> 腾讯新闻 | 热点榜 | ✅ | [qq](./src/app/api/qq/route.ts) |
 | <img src="./public/netease.svg" width="20"/> 网易新闻 | 热榜 | ✅ | [netease](./src/app/api/netease/route.ts) |
 | <img src="./public/thepaper.svg" width="20"/> 澎湃新闻 | 热榜 | ✅ | [thepaper](./src/app/api/thepaper/route.ts) |
-| <img src="./public/dongchedi.svg" width="20"/> 懂车帝 | 热搜榜 | ✅ | [dongchedi](./src/app/api/dongchedi/route.ts) |
+| <img src="./public/v2ex.svg" width="20"/> V2EX | 热门主题 | ✅ | [v2ex](./src/app/api/v2ex/route.ts) |
 | <img src="./public/quark.svg" width="20"/> 夸克 | 今日热点 | ✅ | [quark](./src/app/api/quark/route.ts) |
 | <img src="./public/36kr.svg" width="20"/> 36氪 | 24小时热榜 | ✅ | [36kr](./src/app/api/36kr/route.ts) |
 | <img src="./public/huxiu.svg" width="20"/> 虎嗅 | 最新资讯 | ✅ | [huxiu](./src/app/api/huxiu/route.ts) |
