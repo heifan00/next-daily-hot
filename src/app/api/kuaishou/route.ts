@@ -10,6 +10,7 @@ import { NextResponse } from 'next/server';
 import { getCacheHeaders } from '@/lib/cache';
 
 import { RESPONSE } from '@/enums';
+import { logHotSourceDebug, logHotSourceError, readHotSourceText } from '@/lib/hotSourceDebug';
 import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
@@ -18,21 +19,35 @@ export async function GET() {
   try {
     // 请求数据
     const response = await fetch(url);
+    const responseBody = await readHotSourceText('kuaishou', url, response);
+
     if (!response.ok) {
       // 如果请求失败，抛出错误，不进行缓存
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：快手-热榜`);
     }
-    // 得到请求体
-    const responseBody = await response.text();
     // 处理数据
     const result: App.HotListItem[] = [];
     const pattern = /window.__APOLLO_STATE__=(.*);\(function\(\)/s;
     const idPattern = /clientCacheKey=([A-Za-z0-9]+)/s;
     const matchResult = responseBody.match(pattern);
+
+    if (!matchResult) {
+      logHotSourceDebug('kuaishou', url, {
+        stage: 'apollo-state-missing',
+        hasVisionHotRank: responseBody.includes('visionHotRank'),
+      });
+    }
+
     const jsonObject = matchResult ? JSON.parse(matchResult[1])['defaultClient'] : [];
 
     // 获取所有分类
     const allItems = jsonObject['$ROOT_QUERY.visionHotRank({"page":"home"})']['items'];
+    if (!allItems?.length) {
+      logHotSourceDebug('kuaishou', url, {
+        stage: 'parsed-empty',
+      });
+    }
+
     // 遍历所有分类
     allItems.forEach((v) => {
       // 基础数据
@@ -48,7 +63,9 @@ export async function GET() {
       });
     });
     return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('kuaishou') });
-  } catch {
+  } catch (error) {
+    logHotSourceError('kuaishou', url, error);
+
     return NextResponse.json(responseError);
   }
 }

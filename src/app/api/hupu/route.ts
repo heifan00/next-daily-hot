@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server';
 import { getCacheHeaders } from '@/lib/cache';
 
 import { RESPONSE } from '@/enums';
+import { logHotSourceDebug, logHotSourceError, readHotSourceText } from '@/lib/hotSourceDebug';
 import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
@@ -19,17 +20,25 @@ export async function GET() {
   try {
     // 请求数据
     const response = await fetch(url);
+    const responseBody = await readHotSourceText('hupu', url, response);
+
     if (!response.ok) {
       // 如果请求失败，抛出错误，不进行缓存
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}虎扑-步行街热帖`);
     }
     // 得到请求体
-    const responseBody = await response.text();
     const $ = cheerio.load(responseBody);
     const json = $("script").first();
     const data = JSON.parse(json.text().split("window.$$data=")[1])
       .pageData
       .threads;
+
+    if (!data?.length) {
+      logHotSourceDebug('hupu', url, {
+        stage: 'parsed-empty',
+      });
+    }
+
     const result: App.HotListItem[] = data.map((v) => {
       return {
         id: v.tid,
@@ -42,7 +51,9 @@ export async function GET() {
       };
     });
     return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('hupu') });
-  } catch {
+  } catch (error) {
+    logHotSourceError('hupu', url, error);
+
     return NextResponse.json(responseError);
   }
 }

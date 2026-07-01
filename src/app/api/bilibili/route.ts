@@ -10,6 +10,7 @@ import { NextResponse } from 'next/server';
 import { getCacheHeaders } from '@/lib/cache';
 
 import { RESPONSE } from '@/enums';
+import { logHotSourceDebug, logHotSourceError, readHotSourceText } from '@/lib/hotSourceDebug';
 import { responseError, responseSuccess } from '@/lib/utils';
 
 export async function GET() {
@@ -24,18 +25,24 @@ export async function GET() {
       },
     });
 
+    const text = await readHotSourceText('bilibili', url, response);
+
     if (!response.ok) {
       throw new Error(`${RESPONSE.label(RESPONSE.ERROR)}：哔哩哔哩-热门榜`);
     }
 
     // 响应是 JSONP 格式：__jp0({...})
-    const text = await response.text();
     const jsonStr = text.replace(/^__jp0\(/, '').replace(/\)$/, '');
     const responseBody = JSON.parse(jsonStr);
 
     const list = responseBody?.data?.list;
 
     if (!list?.length) {
+      logHotSourceDebug('bilibili', url, {
+        stage: 'parsed-empty',
+        dataKeys: Object.keys(responseBody?.data || {}),
+      });
+
       return NextResponse.json(responseSuccess(), { headers: getCacheHeaders('bilibili') });
     }
 
@@ -50,7 +57,9 @@ export async function GET() {
     }));
 
     return NextResponse.json(responseSuccess(result), { headers: getCacheHeaders('bilibili') });
-  } catch {
+  } catch (error) {
+    logHotSourceError('bilibili', url, error);
+
     return NextResponse.json(responseError);
   }
 }
